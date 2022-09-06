@@ -1,0 +1,29 @@
+{
+"manifest_version": 3,
+"name": "Spotify",
+"version": "1.0",
+
+"description": "still testing",
+
+"background": {
+    "service_worker": "js/background.js"
+},
+
+"action" : { 
+        "default_icon" : "images/icon.png"
+},
+
+"icons": {
+    "16": "images/icon.png",
+    "32": "images/icon.png",
+    "48": "images/icon.png",
+    "128":"images/icon.png"
+},
+
+"permissions": [
+    "contextMenus",
+    "tabs",
+    "clipboard"
+]
+
+}
