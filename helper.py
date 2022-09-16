@@ -1,4 +1,5 @@
 import requests
+import sys
 
 def lookup(spotify, url):
     """Look up quote for symbol."""
@@ -23,3 +24,4 @@ def lookup(spotify, url):
         }
     except (KeyError, TypeError, ValueError):
         return None
+

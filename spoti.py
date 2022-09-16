@@ -5,28 +5,30 @@ import requests
 import cowsay
 import webbrowser
 import spotipy
-import pytube
+from pytube import Search, YouTube
 from spotipy.oauth2 import SpotifyClientCredentials
 from helper import lookup
+from pytube.cli import on_progress,display_progress_bar #this module contains the built in progress bar. 
+
 
 
 
 save_path = 'C:/Users/POPOCHAN1990/Desktop'
-link = 'https://www.youtube.com/watch?v=SmBzqkgdH9I&list=RDSmBzqkgdH9I&start_radio=1'
+dictlink = {"itag" : "0" ,"url":'https://www.youtube.com/watch?v=SmBzqkgdH9I&list=RDSmBzqkgdH9I&start_radio=1'}
+link = "https://www.youtube.com/watch?v=SmBzqkgdH9I"
 
 while True:
     try: 
         # object creation using YouTube
         # which was imported in the beginning 
-        yt = pytube.YouTube(link)
-        print(yt.title)
+        yt = YouTube(link, )
+        t = yt.streams.filter(only_audio=True)
+        t[0].download(save_path)
     except: 
         print("Connection Error")
-        sys.exit()
+        break
     else:
         break
-
-pytube.Stream.download(link)
 
 
 
