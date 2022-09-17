@@ -1,2 +1,3 @@
-client_id:haha
-secret_id:ahf
+#Write your client_id and secret id after the colon.
+client_id:e9137ae5cdcd40c9818981a8739f66ce
+client_secret:8e16ecbe885342ef9021eb43be3c89b8  

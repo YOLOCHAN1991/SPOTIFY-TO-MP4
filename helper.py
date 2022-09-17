@@ -32,6 +32,7 @@ def lookup(spotify, url):
 
 # Function that downloads the best quality audio from yotube link.
 def download_audio(link, save_path):
+    
     while True:
         try: 
             # object creation using YouTube
@@ -44,18 +45,37 @@ def download_audio(link, save_path):
             break
         else:
             break
-    print(type(rr),"\n", type(rt),"\n", kk)
+    return 
 
 # Get video id from Search method. Video id is the value needed to the watch key in the youtube url.
-def parse_videoId():
-    yt_search = Search("Julieta - Paulo Londra").results
+def parse_videoId(search_query:int):
+    yt_search = Search(search_query).results
     yt_search = re.search(r"videoId=(.+)>$", str(yt_search[0])).groups()[0]
+    return "https://www.youtube.com/watch?v=" + yt_search
+
 
 # Function to get client_id and secret_id from Ids.txt file. For oauth
 def get_ids():
     Ids = {}
     with open('ids.txt', 'r') as file:
         for line in file:
-            (key, value) = line.split(":")
-            Ids[key] = value.replace("\n","")
-    print(Ids)
+            try:
+                (key, value) = line.split(":")
+                Ids[key] = value.replace("\n","").strip()
+            except ValueError:
+                pass
+    if len(Ids) > 2:
+        print("Something went wrong. Ids.txt-Format:")
+        print("client_id:[put client id here]")
+        print("secret_id:[put secret id here]")
+
+    for key in Ids:
+        try:
+            Ids[key]
+        except:
+            print("Something went wrong. Ids.txt-Format:")
+            print("client_id:[put client id here]")
+            print("secret_id:[put secret id here]")
+            sys.exit()
+
+    return Ids
