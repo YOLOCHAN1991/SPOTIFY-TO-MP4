@@ -1,4 +1,5 @@
 import sys
+from typing import Optional
 import requests
 import re
 from pytube import YouTube, Search
@@ -31,25 +32,27 @@ def lookup(spotify, url):
         return None
 
 # Function that downloads the best quality audio from yotube link.
-def download_audio(link, save_path):
+def download_track_bestaudio(link, save_path):
     
     while True:
         try: 
             # object creation using YouTube
             # which was imported in the beginning 
             yt = YouTube(link, on_progress_callback=on_progress)
-            t = yt.streams.filter(type="audio", mime_type="audio/mp4")
-            t[-1].download(output_path=save_path, max_retries=3)
+            best_match = yt.streams.filter(type="audio", mime_type="audio/mp4")
+            file_path = best_match[-1].download(output_path=save_path, max_retries=3)
         except: 
             print('Connection Error')
             break
         else:
-            break
-    return 
+            return file_path
+    return None
 
-# Get video id from Search method. Video id is the value needed to the watch key in the youtube url.
-def parse_videoId(search_query:int):
-    yt_search = Search(search_query).results
+# Get video id from Search method and concatenates it with youtube watch link.
+def splink_to_ytlink(spotify, spotify_link:str):
+    search_query = lookup(spotify, spotify_link)
+
+    yt_search = Search(search_query["artist"] + " - " + search_query["name"]).results
     yt_search = re.search(r"videoId=(.+)>$", str(yt_search[0])).groups()[0]
     return "https://www.youtube.com/watch?v=" + yt_search
 
@@ -79,3 +82,24 @@ def get_ids():
             sys.exit()
 
     return Ids
+
+# Search for playlist. Return a tracks' List
+def search_playlist(spotify, playlist):
+    try:
+        d = spotify.playlist_tracks(playlist)
+    except:
+        print("Wrong Playlsit URL")
+        return None
+
+    tracks = []
+    for track in d["items"]:
+        tracks.append(track["track"]["external_urls"]["spotify"])
+    return tracks
+
+# Download playlist at higuest audio quality
+def download_playlist(spotify, tracks: list, save_path: Optional[str] = None, res: Optional[str] = None):
+
+    for track in tracks:
+        path = download_track_bestaudio(splink_to_ytlink(spotify, track), save_path)
+    print(path)
+    
