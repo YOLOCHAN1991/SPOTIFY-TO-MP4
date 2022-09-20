@@ -1,8 +1,11 @@
+from logging import raiseExceptions
+import os
 import sys
+import keyboard
 import requests
 import re
 import spotipy
-from typing import Optional
+from typing import Any, Optional
 from spotipy.oauth2 import SpotifyClientCredentials
 from pytube import YouTube, Search
 from pytube.cli import on_progress
@@ -11,10 +14,20 @@ from cgi import print_exception
 
 
 
+
 class SpottoYou():
 
-    def __init__(self, cid, cs) -> None:
+    def __init__(self, cid, cs, save_path:Optional[str] = None) -> None:
         self.spotify = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=cid, client_secret=cs))
+        self._save_path = save_path
+
+    @property
+    def save_path(self):
+        if os.path.isdir(str(self._save_path)):
+            return self._save_path
+        self._save_path = os.path.dirname(os.path.realpath(__file__))
+        return self._save_path
+
 
     def lookup(self, url):
         """Look up quote for symbol."""
@@ -40,16 +53,17 @@ class SpottoYou():
         except (KeyError, TypeError, ValueError):
             return None
     
-    def download_track_bestaudio(link, save_path):
-    
+    def download_track_bestaudio(self, yt_link):
+
         while True:
-            try: 
+            try:
                 # object creation using YouTube
                 # which was imported in the beginning 
-                yt = YouTube(link, on_progress_callback=on_progress)
+                yt = YouTube(yt_link, on_progress_callback=on_progress)
                 best_match = yt.streams.filter(type="audio", mime_type="audio/mp4")
-                file_path = best_match[-1].download(output_path=save_path, max_retries=3)
-            except: 
+                file_path = best_match[-1].download(output_path=self.save_path, max_retries=3)
+            except:
+                print_exception()
                 print('Connection Error')
                 break
             else:
@@ -65,30 +79,8 @@ class SpottoYou():
         return "https://www.youtube.com/watch?v=" + yt_search
 
 
-    # Function to get client_id and secret_id from Ids.txt file. For oauth
-    def get_config():
-        Ids = {}
-        with open('config.txt', 'r') as file:
-            for line in file:
-                try:
-                    (key, value) = line.split(":")
-                    Ids[key] = value.replace("\n","").strip()
-                except ValueError:
-                    pass
-        if len(Ids) < 2:
-            print("Something went wrong. config.txt-Format:")
 
-
-        for key in Ids:
-            try:
-                Ids[key]
-            except:
-                print("Something went wrong. config.txt-Format:")
-                sys.exit()
-
-        return Ids
-
-    # Search for playlist. Return a tracks' List
+    # Search for playlist. Return the tracks' List
     def search_playlist(self, playlist):
         try:
             d = self.spotify.playlist_tracks(playlist)
@@ -101,22 +93,39 @@ class SpottoYou():
             tracks.append(track["track"]["external_urls"]["spotify"])
         return tracks
 
-    # Download playlist at higuest audio quality
-    def download_playlist(self, tracks: list, save_path: Optional[str] = None, res: Optional[str] = None):
-
-        if res:
-            self.res = res
-
+    # Download playlist at higuest audio quality.
+    def download_playlist(self, playlist: list):
+        tracks = self.search_playlist(playlist)
         for track in tracks:
-            path = self.download_track_bestaudio(self.splink_to_ytlink(track), save_path)
-        print(path)
-    
+            try:
+                path = self.download_track_bestaudio(self.splink_to_ytlink(track), self.save_path)
+            except:
+                pass
+        print("Playlist installed at", path)
 
-client_id='e9137ae5cdcd40c9818981a8739f66ce'
-client_secret='8e16ecbe885342ef9021eb43be3c89b8'
+# Get config data from config.txt in dict format.
+def get_config():
+        configs = {}
+        with open('config.txt', 'r') as file:
+            for line in file:
+                try:
+                    (key, value) = line.split("=")
+                    configs[key] = value.replace("\n","").strip()
+                except ValueError:
+                    pass
+        if len(configs) < 2:
+            print("Something went wrong. config.txt-Format:")
+            input("Press any key to close")
+            sys.exit()
+            
 
-spotify = SpottoYou(client_id, client_secret)
 
-s = spotify.lookup("https://open.spotify.com/track/5CmIIBRVQWLX2uXAkuBlS8?si=b25676a5c4e947a2")
+        for key in configs:
+            try:
+                configs[key]
+            except:
+                print("Something went wrong. config.txt-Format:")
+                input("Press any key to close")
+                sys.exit()
 
-print(s)
+        return configs

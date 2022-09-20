@@ -1,3 +1,5 @@
 #Write your client_id and secret id after the colon.
-client_id:e9137ae5cdcd40c9818981a8739f66ce
-client_secret:8e16ecbe885342ef9021eb43be3c89b8  
+client_id=e9137ae5cdcd40c9818981a8739f66ce
+client_secret=8e16ecbe885342ef9021eb43be3c89b8
+# Write the save_path where you want your files to be saved Format- C:/Users/POPOCHAN1990/Documents/pp
+save_path=C:/Users/POPOCHAN1990/Documen
