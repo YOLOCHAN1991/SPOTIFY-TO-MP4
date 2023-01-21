@@ -29,6 +29,8 @@ client_secret='8e16ecbe885342ef9021eb43be3c89b8'
 
 
 
-spotify = SpottoYou(config["client_id"], config["client_secret"], config["save_path"])
-
-spotify.download_playlist("https://open.spotify.com/playlist/37i9dQZF1E8AFUoHDGhHg8?si=059a0bcb17504cd9")
+y = YouTube("https://www.youtube.com/watch?v=WJcWB246gek&embeds_euri=https%3A%2F%2Favalicmod19.uveg.edu.mx%2F&source_ve_path=MjM4NTE&feature=emb_title")
+y = y.streams.filter(mime_type="video/mp4", progressive="True" ).order_by("resolution")
+print(y)
+y[-1].download()
+print("succesful")

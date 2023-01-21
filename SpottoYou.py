@@ -61,7 +61,8 @@ class SpottoYou():
                 # which was imported in the beginning 
                 yt = YouTube(yt_link, on_progress_callback=on_progress)
                 best_match = yt.streams.filter(type="audio", mime_type="audio/mp4")
-                file_path = best_match[-1].download(output_path=self.save_path, max_retries=3)
+                best_match[-1].subtype = "mp3"
+                file_path = best_match[-1].download(output_path=self.save_path)
             except:
                 print_exception()
                 print('Connection Error')
@@ -81,7 +82,7 @@ class SpottoYou():
 
 
     # Search for playlist. Return the tracks' List
-    def search_playlist(self, playlist):
+    def search_playlist(self, playlist: str):
         try:
             d = self.spotify.playlist_tracks(playlist)
         except:
@@ -91,16 +92,20 @@ class SpottoYou():
         tracks = []
         for track in d["items"]:
             tracks.append(track["track"]["external_urls"]["spotify"])
+        print(len(tracks), "tracks were found in this playlist")
         return tracks
 
-    # Download playlist at higuest audio quality.
+    # Download playlist at higuest audio quality. Input(Spotify playilist url)
     def download_playlist(self, playlist: list):
         tracks = self.search_playlist(playlist)
+        counter_tracks = 0
         for track in tracks:
             try:
-                path = self.download_track_bestaudio(self.splink_to_ytlink(track), self.save_path)
-            except:
-                pass
+                counter_tracks += 1
+                path = self.download_track_bestaudio(self.splink_to_ytlink(track))
+            except Exception as e:
+                counter_tracks -= 1
+                print(e)
         print("Playlist installed at", path)
 
 # Get config data from config.txt in dict format.

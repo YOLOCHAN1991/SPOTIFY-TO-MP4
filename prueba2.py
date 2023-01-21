@@ -31,4 +31,4 @@ client_secret='8e16ecbe885342ef9021eb43be3c89b8'
 
 spotify = SpottoYou(config["client_id"], config["client_secret"], config["save_path"])
 
-spotify.download_playlist("https://open.spotify.com/playlist/37i9dQZF1E8AFUoHDGhHg8?si=059a0bcb17504cd9")
+spotify.download_playlist("https://open.spotify.com/playlist/37i9dQZF1E8KJg3WkXQbZu?si=3c8b199871104724")
