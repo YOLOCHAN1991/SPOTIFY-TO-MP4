@@ -25,7 +25,7 @@ class SpottoYou():
     def save_path(self):
         if os.path.isdir(str(self._save_path)):
             return self._save_path
-        self._save_path = os.path.dirname(os.path.realpath(__file__))
+        self._save_path = os.path.dirname(os.path.realpath("config.txt"))
         return self._save_path
 
 

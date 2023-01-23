@@ -21,4 +21,4 @@ except:
 
 print(spotify.save_path)
 
-spotify.download_playlist(spotify.splink_to_ytlink(sp_song_link))
+spotify.download_track_bestaudio(spotify.splink_to_ytlink(sp_song_link))

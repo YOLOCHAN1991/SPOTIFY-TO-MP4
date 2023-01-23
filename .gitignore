@@ -6,3 +6,7 @@ uvegvideos.py
 config.txt
 s
 .cache
+build
+dist
+*.mp3
+spoti.spec
