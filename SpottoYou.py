@@ -1,6 +1,8 @@
 from logging import raiseExceptions
 import os
 import sys
+import keyboard
+import requests
 import re
 import spotipy
 from typing import Any, Optional
@@ -28,7 +30,9 @@ class SpottoYou():
 
 
     def lookup(self, url):
+        """Look up quote for symbol."""
 
+        # Contact API
         try:
             song = self.spotify.track(url)
         except:
@@ -59,8 +63,8 @@ class SpottoYou():
                 best_match = yt.streams.filter(type="audio", mime_type="audio/mp4")
                 best_match[-1].subtype = "mp3"
                 file_path = best_match[-1].download(output_path=self.save_path)
-            except:
-                print_exception()
+            except Exception as e:
+                print(e)
                 print('Connection Error')
                 break
             else:
@@ -77,12 +81,12 @@ class SpottoYou():
 
 
 
-    # Search for playlist. Return the tracks' List
+    # Search for spotify playlist. Return the tracks' List
     def search_playlist(self, playlist: str):
         try:
             d = self.spotify.playlist_tracks(playlist)
         except:
-            print("Wrong Playlsit URL")
+            print("Wrong Playlist URL")
             return None
 
         tracks = []
@@ -93,16 +97,30 @@ class SpottoYou():
 
     # Download playlist at higuest audio quality. Input(Spotify playilist url)
     def download_playlist(self, playlist: list):
-        tracks = self.search_playlist(playlist)
-        counter_tracks = 0
-        for track in tracks:
-            try:
-                counter_tracks += 1
-                path = self.download_track_bestaudio(self.splink_to_ytlink(track))
-            except Exception as e:
-                counter_tracks -= 1
-                print(e)
-        print("Playlist installed at", path)
+        try:
+            tracks = self.search_playlist(playlist)
+            counter_tracks = 0
+            print("Playlist installing at", self.save_path)
+            for track in tracks:
+                try:
+                    counter_tracks += 1
+                    path = self.download_track_bestaudio(self.splink_to_ytlink(track))
+                except Exception as e:
+                    counter_tracks -= 1
+                    print(e)
+            print("Playlist installed at", self.save_path)
+        except:
+            return None
+
+def link_type(link):
+    if "youtube.com/watch" in link:
+        return "YouTube video"
+    elif "spotify.com/track/" in link:
+        return "Spotify song"
+    elif "spotify.com/playlist/" in link:
+        return "Spotify playlist"
+    else:
+        return "Unknown link"
 
 # Get config data from config.txt in dict format.
 def get_config():
