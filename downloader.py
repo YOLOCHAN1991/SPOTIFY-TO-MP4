@@ -52,13 +52,6 @@ class YoutubeDownloader(QtWidgets.QWidget):
                 QtWidgets.QMessageBox.information(self, "Success", "Video downloaded successfully!")
         except Exception as e:
             QtWidgets.QMessageBox.warning(self, "Error", str(e))
-        
-    def browse(self):
-        options = QtWidgets.QFileDialog.Option(s)
-        options |= QtWidgets.QFileDialog.ReadOnly
-        fileName, _ = QtWidgets.QFileDialog.getSaveFileName(self,"QFileDialog.getSaveFileName()", "","All Files (*);;MP4 Files (*.mp4)", options=options)
-        if fileName:
-            self.lineEdit_output.setText(fileName)
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication([])
