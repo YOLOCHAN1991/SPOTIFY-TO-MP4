@@ -1,5 +1,5 @@
-#Write your client_id and secret id after the equal sign.
+### Write your client_id and secret id after the equal sign. ###
 client_id=
 client_secret=
-# Write the save_path where you want your files to be saved. Format-(\'C:/Users/POPOCHAN1990/Documents/pp'\) (if not paht valid it will download directly on the folder that you have the files)
-save_path=H:/musica
+### Write the save_path where you want your files to be saved. Format-(C:/Users/username/Documents/pp) (if not path valid it will download directly on the folder that you have the executable file) ###
+save_path=
