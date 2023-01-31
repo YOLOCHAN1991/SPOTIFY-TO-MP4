@@ -15,13 +15,10 @@ class YoutubeDownloader(QtWidgets.QWidget):
         self.url_input = QtWidgets.QLineEdit()
         self.download_button = QtWidgets.QPushButton("Download")
         self.download_button.clicked.connect(self.download)
-        self.progress = QtWidgets.QProgressBar()
-        self.progress.setValue(0)
         
         layout = QtWidgets.QVBoxLayout()
         layout.addWidget(self.url_input)
         layout.addWidget(self.download_button)
-        layout.addWidget(self.progress)
         
         self.setLayout(layout)
         self.setWindowTitle("YouTube Downloader")
@@ -31,7 +28,7 @@ class YoutubeDownloader(QtWidgets.QWidget):
         
         #output_path = self.lineEdit_output.text()
         if not url:
-            QtWidgets.QMessageBox.warning(self, "Error", "Please enter a valid URL and select a location to save the video.")
+            QtWidgets.QMessageBox.warning(self, "Error", "Please enter a valid URL.")
             return
         try:
 
