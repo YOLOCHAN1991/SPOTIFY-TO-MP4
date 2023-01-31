@@ -5,8 +5,7 @@ helper.py
 uvegvideos.py
 config.txt
 s
-.cache
 build
 dist
+.cache
 *.mp3
-spoti.spec
