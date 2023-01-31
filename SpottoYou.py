@@ -60,6 +60,7 @@ class SpottoYou():
                 # object creation using YouTube
                 # which was imported in the beginning 
                 yt = YouTube(yt_link, on_progress_callback=on_progress)
+                print("DOWNLOADING: ", yt.title, "...")
                 best_match = yt.streams.filter(type="audio", mime_type="audio/mp4")
                 best_match[-1].subtype = "mp3"
                 file_path = best_match[-1].download(output_path=self.save_path)

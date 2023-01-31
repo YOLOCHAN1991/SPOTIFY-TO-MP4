@@ -10,7 +10,7 @@ from SpottoYou import SpottoYou, get_config
 
 
 
-link = "https://www.youtube.com/watch?v="
+link = "https://www.youtube.com/watch?v=bX3S-_jUauc&list=RDMMs3Qe_yRVDuU&index=4&t=109s"
 sp_song_link = "https://open.spotify.com/track/5CmIIBRVQWLX2uXAkuBlS8?si=23d548dc17bd45d6"
 
 config = get_config()
@@ -22,4 +22,4 @@ except:
 
 print(spotify.save_path)
 
-spotify.download_track_bestaudio(spotify.splink_to_ytlink(sp_song_link))
+spotify.download_track_bestaudio(link)
